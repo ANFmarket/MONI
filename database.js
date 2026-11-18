@@ -1,0 +1,1 @@
+const DB={key:'moni-v01',load(){try{return JSON.parse(localStorage.getItem(this.key)||'[]')}catch(e){alert('No se pudieron leer tus datos.');throw e}},save(rows){localStorage.setItem(this.key,JSON.stringify(rows))}};
