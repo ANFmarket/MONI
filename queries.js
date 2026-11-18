@@ -1,12 +1,19 @@
 function moniQuery(phrase,records,now=today()){
  const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
  let t=norm(phrase).replace(/[¿?¡!.,]/g,' ').replace(/\s+/g,' ').trim().replace(/^moni\s+/,'');
- if(!/^(cuant\w*|cual|que|en que|dime|muestra\w*|como|cuando|y el|me puedes decir)\b/.test(t))return null;
+ if(!/^(cuant\w*|cual|que|en que|dime|muestra\w*|como|cuando|y el|me puedes decir|he gastado|compara|comparativa|gast[eao]|este mes|esta quincena)\b/.test(t))return null;
  const fail=()=>({text:'No entendí tu consulta. Prueba cuánto gasté en café este mes, o cuál fue mi gasto más grande.'});
  if(/saldo|dinero me queda|dinero tengo|cuanto me queda/.test(t))return {text:'No conozco tu saldo real. Solo puedo consultar tus movimientos registrados.'};
  let d=new Date(now+'T12:00:00'),start='',end=now,label='en tu historial';const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
- const periods=/\b(hoy|ayer|esta semana|la semana pasada|semana pasada|este mes|mes actual|el mes pasado|mes pasado|mes anterior|este ano|ano actual|todo el historial)\b/g;
- if(/\bhoy\b/.test(t)){start=now;label='hoy'}else if(/\bayer\b/.test(t)){d.setDate(d.getDate()-1);start=end=iso(d);label='ayer'}else if(/mes pasado|mes anterior/.test(t)){end=iso(new Date(d.getFullYear(),d.getMonth(),0));start=end.slice(0,7)+'-01';label='el mes pasado'}else if(/semana pasada|esta semana/.test(t)){d.setDate(d.getDate()-(d.getDay()+6)%7);if(/pasada/.test(t)){d.setDate(d.getDate()-7);let e=new Date(d);e.setDate(e.getDate()+6);end=iso(e);label='la semana pasada'}else label='esta semana';start=iso(d)}else if(/este ano|ano actual/.test(t)){start=now.slice(0,4)+'-01-01';label='este año'}else if(/este mes|mes actual/.test(t)){start=now.slice(0,7)+'-01';label='este mes'}
+ const half=(date)=>{let y=date.getFullYear(),m=date.getMonth(),h=date.getDate()>15?16:1;return new Date(y,m,h,12)};
+ const previousHalf=(date)=>{let h=half(date);h.setDate(h.getDate()-1);return half(h)};
+ const rangeTotal=(a,b)=>sum(records.filter(r=>r.type==='expense'&&r.date>=a&&r.date<=b));
+ if(/(?:compar|mas|menos|diferencia|respecto)/.test(t)&&(/mes pasado|mes anterior|quincena pasada|quincena anterior|comparativa mensual|comparativa quincenal|que (?:el|la) (?:anterior|pasad[oa])/.test(t))&&/gast|compar|diferencia/.test(t)){
+  let q=/quincen/.test(t),a=q?half(d):new Date(d.getFullYear(),d.getMonth(),1,12),p=q?previousHalf(d):new Date(d.getFullYear(),d.getMonth()-1,1,12),limit=new Date(a);limit.setDate(limit.getDate()-1);let pe=new Date(p);pe.setDate(pe.getDate()+d.getDate()-a.getDate());if(pe>limit)pe=limit;let x=rangeTotal(iso(a),now),y=rangeTotal(iso(p),iso(pe)),diff=x-y;
+  return {text:'En '+(q?'esta quincena':'este mes')+' llevas '+money(x)+'. En los mismos días del periodo anterior gastaste '+money(y)+'. '+(diff===0?'El gasto es igual.':'Has gastado '+money(Math.abs(diff))+(diff>0?' más.':' menos.'))};
+ }
+ const periods=/\b(hoy|ayer|esta semana|la semana pasada|semana pasada|este mes|mes actual|el mes pasado|mes pasado|mes anterior|este ano|ano actual|todo el historial|esta quincena|quincena actual|la quincena pasada|quincena pasada|quincena anterior)\b/g;
+ if(/quincena pasada|quincena anterior/.test(t)){start=iso(previousHalf(d));let e=half(d);e.setDate(e.getDate()-1);end=iso(e);label="la quincena pasada"}else if(/esta quincena|quincena actual/.test(t)){start=iso(half(d));label="esta quincena"}else if(/\bhoy\b/.test(t)){start=now;label='hoy'}else if(/\bayer\b/.test(t)){d.setDate(d.getDate()-1);start=end=iso(d);label='ayer'}else if(/mes pasado|mes anterior/.test(t)){end=iso(new Date(d.getFullYear(),d.getMonth(),0));start=end.slice(0,7)+'-01';label='el mes pasado'}else if(/semana pasada|esta semana/.test(t)){d.setDate(d.getDate()-(d.getDay()+6)%7);if(/pasada/.test(t)){d.setDate(d.getDate()-7);let e=new Date(d);e.setDate(e.getDate()+6);end=iso(e);label='la semana pasada'}else label='esta semana';start=iso(d)}else if(/este ano|ano actual/.test(t)){start=now.slice(0,4)+'-01-01';label='este año'}else if(/este mes|mes actual/.test(t)){start=now.slice(0,7)+'-01';label='este mes'}
  let s=t.replace(periods,'').replace(/\s+/g,' ').trim();
  let mode='total',subject='',income=false,ants=false;
  s=s.replace(/^(?:dime|me puedes decir) (?:por favor )?/, '').replace(/ por favor$/, '');
