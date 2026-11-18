@@ -4,12 +4,12 @@ function moniQuery(phrase, records, now=today()) {
  if(!/^(cuant[oa]s?|cual|que|en que|dime|muestra|como|y el)\b/.test(t))return null;
  const cash=c=>(c/100).toLocaleString('es-MX',{style:'currency',currency:'MXN'});
  const result=(text)=>({text});
- if(/saldo|dinero me queda|dinero tengo|cuanto me queda/.test(t))return result('Tu saldo registrado es de '+cash(records.reduce((s,r)=>s+(r.type==='income'?r.cents:-r.cents),0))+'.');
+ if(/saldo|dinero me queda|dinero tengo|cuanto me queda/.test(t))return result('No conozco tu saldo disponible real. Puedes preguntarme cuánto has gastado o cuánto has recibido.');
  let date=new Date(now+'T12:00:00'), start='',end=now,label='en todo tu historial';
  const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
  if(/\bhoy\b/.test(t)){start=now;label='hoy'}else if(/\bayer\b/.test(t)){date.setDate(date.getDate()-1);start=end=iso(date);label='ayer'}else if(/mes pasado|mes anterior/.test(t)){end=iso(new Date(date.getFullYear(),date.getMonth(),0));start=end.slice(0,7)+'-01';label='el mes pasado'}else if(/semana pasada|esta semana/.test(t)){date.setDate(date.getDate()-((date.getDay()+6)%7));if(/pasada/.test(t)){date.setDate(date.getDate()-7);let e=new Date(date);e.setDate(e.getDate()+6);end=iso(e);label='la semana pasada'}else label='esta semana';start=iso(date)}else if(/este ano|ano actual/.test(t)){start=now.slice(0,4)+'-01-01';label='este año'}else if(/este mes|mes actual|gastado mas|gasto mas/.test(t)){start=now.slice(0,7)+'-01';label='este mes'}else if(/ultimo[s]? \d+|ultimo[s]? mes|ano pasado|desde|entre|septiembre|octubre|noviembre|diciembre|enero|febrero|marzo|abril|mayo|junio|julio|agosto/.test(t))return result('Todavía no puedo interpretar ese periodo. Prueba hoy, este mes, el mes pasado o este año.');
  let income=/recibi|recibido|ingresos?|cobre|ganado/.test(t), ants=/hormiga/.test(t), top=/en que.*mas|mayor gasto|principales gastos|categorias/.test(t);
- if(!income&&!ants&&!top&&!/gast|pague|pagado|compr/.test(t))return result('Prueba preguntarme cuánto gastaste hoy o cuánto dinero te queda.');
+ if(!income&&!ants&&!top&&!/gast|pague|pagado|compr/.test(t))return result('Prueba preguntarme cuánto gastaste hoy o cuánto gastaste este mes.');
  let list=records.filter(r=>r.type===(income?'income':'expense')&&r.date>=start&&r.date<=end);
  if(ants)list=list.filter(r=>r.small);
  let subject=t.match(/(?:gast(?:e|ado|as|o)|pague|pagado|compre|gastos?)\s+en\s+(.+)/)?.[1];
