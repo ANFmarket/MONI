@@ -18,10 +18,10 @@ function moniQuery(phrase,records,now=today()){
  let mode='total',subject='',income=false,ants=false;
  s=s.replace(/^(?:dime|me puedes decir) (?:por favor )?/, '').replace(/ por favor$/, '');
  s=s.replace(/^(cuanto) (?:llevo gastado|he gastado|me he gastado|se me ha ido)/,'$1 gaste');
- if(/^(?:en que (?:he )?gast(?:e|ado|o) mas(?: dinero)?|cuales son mis principales gastos)$/.test(s))mode='top';
+ if(/^(?:en que (?:he )?gast(?:e|ado|o|amos) mas(?: dinero)?|cuales son mis principales gastos)$/.test(s))mode='top';
  else if(/^(?:cual (?:fue|es|ha sido) (?:mi|el|la) (?:gasto mas grande|compra mas cara|mayor gasto|gasto mas alto))$/.test(s))mode='max';
  else if(/^(?:cual fue mi ultimo gasto|cual es mi ultimo gasto)$/.test(s))mode='last';
- else {let m=s.match(/^(?:cuanto|dime cuanto) (?:dinero )?(?:(?:he |llevo )?gast(?:e|ado|o)|(?:se me ha ido)|llevo)(?: (?:dinero|en total))?(?: en (.+))?$/);if(m){subject=m[1]||'';if(subject==='promedio'){mode='avg';subject=''}else if(subject.startsWith('promedio en ')){mode='avg';subject=subject.slice(12)}}else if((m=s.match(/^cuantas veces (?:compre|he comprado|pague|cargue) (.+)$/))){mode='count';subject=m[1]}else if((m=s.match(/^cuanto (?:gasto|gaste) en promedio(?: en (.+))?$/))){mode='avg';subject=m[1]||''}else if(/^cuanto (?:dinero )?(?:he recibido|recibi|ingrese)$/.test(s)||/^cuanto(?:s)? ingresos(?: tengo)?$/.test(s))income=true;else return fail();}
+ else {let m=s.match(/^(?:cuanto|dime cuanto) (?:dinero )?(?:(?:he |llevo |hemos )?gast(?:e|ado|o|amos)|(?:se me ha ido)|llevo)(?: (?:dinero|en total))?(?: en (.+))?$/);if(m){subject=m[1]||'';if(subject==='promedio'){mode='avg';subject=''}else if(subject.startsWith('promedio en ')){mode='avg';subject=subject.slice(12)}}else if((m=s.match(/^cuantas veces (?:compre|he comprado|pague|cargue) (.+)$/))){mode='count';subject=m[1]}else if((m=s.match(/^cuanto (?:gasto|gaste) en promedio(?: en (.+))?$/))){mode='avg';subject=m[1]||''}else if(/^cuanto (?:dinero )?(?:he recibido|recibi|ingrese)$/.test(s)||/^cuanto(?:s)? ingresos(?: tengo)?$/.test(s))income=true;else return fail();}
  if(subject){subject=subject.replace(/^(?:el|la|los|las|un|una) /,'');if(/^(?:gastos )?hormiga$/.test(subject)){ants=true;subject=''}}
  const aliases={cafes:'cafe',juguetes:'juguete',reparaciones:'reparacion',servicios:'servicio'};const key=aliases[subject]||subject;
  let list=records.filter(r=>r.type===(income?'income':'expense')&&r.date>=start&&r.date<=end);
