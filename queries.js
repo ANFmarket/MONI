@@ -1,7 +1,7 @@
 function moniQuery(phrase,records,now=today()){
  const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
  let t=norm(phrase).replace(/[¿?¡!.,]/g,' ').replace(/\s+/g,' ').trim().replace(/^moni\s+/,'');
- if(!/^(cuant\w*|cual|que|en que|dime|muestra\w*|como|cuando|y el|me puedes decir|he gastado|compara|comparativa|gast[eao]|este mes|esta quincena)\b/.test(t))return null;
+ if(!/^(cuant\w*|cual|que|en que|dime|muestra\w*|como|cuando|y el|me puedes decir|he gastado|compara|comparativa|este mes|esta quincena)\b/.test(t))return null;
  const fail=()=>({text:'No entendí tu consulta. Prueba cuánto gasté en café este mes, o cuál fue mi gasto más grande.'});
  if(/saldo|dinero me queda|dinero tengo|cuanto me queda/.test(t))return {text:'No conozco tu saldo real. Solo puedo consultar tus movimientos registrados.'};
  let d=new Date(now+'T12:00:00'),start='',end=now,label='en tu historial';const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
