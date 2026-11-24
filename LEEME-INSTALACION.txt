@@ -1,8 +1,8 @@
-MONI · 1.0 RC2 — ENTREGA ACUMULATIVA PARA REVISIÓN FINAL
+MONI · 1.0 — ENTREGA ACUMULATIVA PARA REVISIÓN FINAL
 
 1. Antes de instalar: entra a MONI y selecciona Guardar respaldo. Guarda el JSON.
 2. Descomprime el ZIP y sube TODOS los archivos de esta carpeta al nivel principal del repositorio GitHub MONI. Reemplaza los archivos anteriores y haz Commit changes.
-3. Abre la aplicación y verifica que diga «MONI · Versión 1.0 RC2».
+3. Abre la aplicación y verifica que diga «MONI · Versión 1.0».
 
 CAMBIOS DE ESTA ENTREGA:
 - Slogan del menú: «Entiende tu dinero.»
@@ -22,4 +22,4 @@ PRUEBAS:
 - Verificar micrófono, Excel (cuatro hojas y firma ANF) y respaldos.
 
 Importante: pagos, movimientos y metas se guardan en ESTE navegador. No hay sincronización automática entre dispositivos.
-La versión RC2 es candidata y necesita una revisión final real antes de declarar MONI 1.0 estable.
+La versión visible es 1.0; conviene probar la aplicación y sus funciones antes de considerarla definitivamente aprobada.

@@ -1,4 +1,4 @@
-/* MONI 1.0 RC2 — executive panels; local-only budget, goals and recurring templates */
+/* MONI 1.0 — executive panels; local-only budget, goals and recurring templates */
 (()=>{
   const el=id=>document.getElementById(id), fmt=c=>money(Math.round(c)),safe=(id,s)=>{const x=el(id);if(x)x.textContent=s}, read=(key,fallback)=>{try{const x=JSON.parse(localStorage.getItem(key));return x??fallback}catch{return fallback}}, write=(key,data)=>localStorage.setItem(key,JSON.stringify(data));
   let budget=read('moni-budget-limit',0),goals=read('moni-savings-goals',[]),fixed=read('moni-fixed-templates',[]);
