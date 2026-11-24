@@ -63,7 +63,22 @@
     drawUpcoming();
     safe('homeForecast',fmt(forecast));safe('homeAdvice',limit?`Proyección de gasto al final del mes. ${forecast>limit?'Podrías superar tu límite por '+fmt(forecast-limit):'Tu presupuesto estimado tendría '+fmt(limit-forecast)+' de margen.'}`:'Proyección según tus gastos registrados; define un presupuesto para compararla.');
   }
-  el('budgetLimit').value=budget||'';el('saveBudget').onclick=()=>{const n=Number(el('budgetLimit').value);if(!Number.isFinite(n)||n<0)return alert('Escribe un importe válido.');try{budget=n;write('moni-budget-limit',budget);draw()}catch{alert('No se pudo guardar el presupuesto')}};
+  function updateBudgetButtons(){
+    el('saveBudget').textContent=budget>0?'Actualizar presupuesto':'Guardar presupuesto';
+    el('deleteBudget').hidden=!(budget>0);
+  }
+  el('budgetLimit').value=budget>0?budget:'';
+  updateBudgetButtons();
+  el('saveBudget').onclick=()=>{
+    const raw=el('budgetLimit').value.trim(),n=Number(raw);
+    if(raw===''||!Number.isFinite(n)||n<=0||Math.round(n*100)!==n*100)return alert('Ingresa un presupuesto válido, mayor que cero y con hasta dos decimales.');
+    try{write('moni-budget-limit',n);budget=n;updateBudgetButtons();draw();alert('Presupuesto guardado correctamente.')}catch{alert('No se pudo guardar el presupuesto.');}
+  };
+  el('deleteBudget').onclick=()=>{
+    if(!budget)return;
+    if(!confirm('¿Eliminar el límite de presupuesto? Tus ingresos, gastos y movimientos se conservarán.'))return;
+    try{localStorage.removeItem('moni-budget-limit');budget=0;el('budgetLimit').value='';updateBudgetButtons();draw();alert('Presupuesto eliminado. Tus movimientos siguen intactos.')}catch{alert('No se pudo eliminar el presupuesto.');}
+  };
   function drawFixed(){
     const target=el('fixedList');target.replaceChildren();
     monthlyFixed().forEach(f=>{

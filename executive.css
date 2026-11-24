@@ -14,3 +14,6 @@ html{scroll-behavior:smooth}body{background:#f3f6f8;color:var(--ink);font-family
 .payment-status.paid{background:#e4f6ed;color:#16764e}
 .payment-status.pending{background:#fff3dd;color:#92611b}
 @media(max-width:520px){.upcoming-item{grid-template-columns:minmax(0,1fr) auto;gap:7px}.payment-status{grid-column:1/-1;justify-self:start}.upcoming-panel .between{align-items:start}}
+
+/* MONI 1.0: editable and removable monthly budget */
+.budget-buttons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}.budget-buttons .light-button{background:#fff1ef;color:#a23d3d;border:1px solid #f3d0ce}.budget-buttons button[hidden]{display:none!important}

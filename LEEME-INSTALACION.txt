@@ -1,25 +1,15 @@
-MONI · 1.0 — ENTREGA ACUMULATIVA PARA REVISIÓN FINAL
+MONI 1.0 — Correcciones de encabezado y presupuesto
 
-1. Antes de instalar: entra a MONI y selecciona Guardar respaldo. Guarda el JSON.
-2. Descomprime el ZIP y sube TODOS los archivos de esta carpeta al nivel principal del repositorio GitHub MONI. Reemplaza los archivos anteriores y haz Commit changes.
-3. Abre la aplicación y verifica que diga «MONI · Versión 1.0».
+1. En MONI guarda tu respaldo antes de actualizar.
+2. Descomprime y sube TODOS los archivos de este paquete a la raíz del repositorio GitHub, reemplazando los existentes.
+3. Confirma Commit changes y abre la aplicación.
 
-CAMBIOS DE ESTA ENTREGA:
-- Slogan del menú: «Entiende tu dinero.»
-- Presupuesto excedido: porcentaje adicional y cantidad exacta en MXN.
-- Inicio: tarjeta «Próximos pagos» con vencimiento, pendientes y total mensual por pagar.
-- Gastos fijos: día de vencimiento de cada mes y estado Pendiente / Pagado.
-- Registrar pago solo una vez por mes; se genera un gasto real al confirmar. La plantilla no descuenta dinero por sí sola.
-- Conserva los movimientos, voz, consultas, reportes, estilos, Excel y firma ANF del paquete base.
-- Caché y versión visibles actualizados.
+CAMBIOS
+- El logo lateral dice MONI, sin el símbolo de rayitas; se conserva «Entiende tu dinero.».
+- El presupuesto permite guardar, actualizar o eliminar el límite. Eliminarlo NO elimina movimientos.
+- Se conserva la versión visible MONI 1.0.
+- Se actualizó el caché a moni-104.
+- La firma ANF, los reportes y la voz no fueron alterados.
 
-PRUEBAS:
-- Ver «Entiende tu dinero.» debajo de MONI.
-- Presupuesto superado: mostrar MXN y porcentaje excedidos.
-- Crear gasto fijo y ver «Pendiente» en Inicio.
-- Pulsar Registrar pago en Gastos fijos y ver «Pagado» en Inicio y el movimiento nuevo.
-- No permitir dos registros del mismo gasto fijo dentro del mismo mes.
-- Verificar micrófono, Excel (cuatro hojas y firma ANF) y respaldos.
-
-Importante: pagos, movimientos y metas se guardan en ESTE navegador. No hay sincronización automática entre dispositivos.
-La versión visible es 1.0; conviene probar la aplicación y sus funciones antes de considerarla definitivamente aprobada.
+PRUEBAS
+En Presupuesto cambia el límite y comprueba Inicio; después elimínalo y comprueba que los movimientos siguen intactos.
