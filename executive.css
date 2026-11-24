@@ -17,3 +17,7 @@ html{scroll-behavior:smooth}body{background:#f3f6f8;color:var(--ink);font-family
 
 /* MONI 1.0: editable and removable monthly budget */
 .budget-buttons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}.budget-buttons .light-button{background:#fff1ef;color:#a23d3d;border:1px solid #f3d0ce}.budget-buttons button[hidden]{display:none!important}
+
+/* Restore the original clean MONI wordmark typography without the bars icon. */
+.brand{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:800;letter-spacing:-1.3px}
+.brand small{letter-spacing:0;font-weight:500}

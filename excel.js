@@ -1,8 +1,8 @@
-// MONI 0.9.5 - Excel ejecutivo sin dependencias externas. Gráficas como imagen con leyendas externas.
+// MONI 1.0 - Excel ejecutivo, filas OOXML ordenadas y sin duplicados.
 const MX='http://schemas.openxmlformats.org/spreadsheetml/2006/main',RX='http://schemas.openxmlformats.org/officeDocument/2006/relationships',PX='http://schemas.openxmlformats.org/package/2006/relationships';
 const xml=s=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+s;
 const esc=s=>String(s??'').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function zipStore(files){const enc=new TextEncoder(), chunks=[],central=[];let offset=0,cs=0;const crc=b=>{let c=~0;for(let x of b){c^=x;for(let j=0;j<8;j++)c=(c>>>1)^((c&1)?0xedb88320:0)}return ~c>>>0};const pack=(n,fn)=>{let b=new Uint8Array(n);fn(new DataView(b.buffer));return b};for(let [name,value] of Object.entries(files)){let n=enc.encode(name),b=typeof value==='string'?enc.encode(value):value,c=crc(b);let h=pack(30,d=>{d.setUint32(0,0x04034b50,true);d.setUint16(4,20,true);d.setUint32(14,c,true);d.setUint32(18,b.length,true);d.setUint32(22,b.length,true);d.setUint16(26,n.length,true)});let z=pack(46,d=>{d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint32(16,c,true);d.setUint32(20,b.length,true);d.setUint32(24,b.length,true);d.setUint16(28,n.length,true);d.setUint32(42,offset,true)});chunks.push(h,n,b);central.push(z,n);offset+=h.length+n.length+b.length;cs+=z.length+n.length}let end=pack(22,d=>{d.setUint32(0,0x06054b50,true);d.setUint16(8,central.length/2,true);d.setUint16(10,central.length/2,true);d.setUint32(12,cs,true);d.setUint32(16,offset,true)});return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+function zipStore(files){const enc=new TextEncoder(), chunks=[],central=[];let offset=0,cs=0;const crc=b=>{let c=~0;for(let x of b){c^=x;for(let j=0;j<8;j++)c=(c>>>1)^((c&1)?0xedb88320:0)}return ~c>>>0};const pack=(n,fn)=>{let b=new Uint8Array(n);fn(new DataView(b.buffer));return b};for(let [name,value] of Object.entries(files)){let n=enc.encode(name),b=typeof value==='string'?enc.encode(value):value,c=crc(b);let h=pack(30,d=>{d.setUint32(0,0x04034b50,true);d.setUint16(4,20,true);d.setUint16(12,33,true);d.setUint32(14,c,true);d.setUint32(18,b.length,true);d.setUint32(22,b.length,true);d.setUint16(26,n.length,true)});let z=pack(46,d=>{d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint16(14,33,true);d.setUint32(16,c,true);d.setUint32(20,b.length,true);d.setUint32(24,b.length,true);d.setUint16(28,n.length,true);d.setUint32(42,offset,true)});chunks.push(h,n,b);central.push(z,n);offset+=h.length+n.length+b.length;cs+=z.length+n.length}let end=pack(22,d=>{d.setUint32(0,0x06054b50,true);d.setUint16(8,central.length/2,true);d.setUint16(10,central.length/2,true);d.setUint32(12,cs,true);d.setUint32(16,offset,true)});return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
 const exRel=(id,type,target)=>`<Relationship Id="${id}" Type="${RX}/${type}" Target="${target}"/>`;
 const exRels=s=>xml(`<Relationships xmlns="${PX}">${s}</Relationships>`);
 const exMoney=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(n/100);
@@ -51,7 +51,7 @@ function makeExcel(all,rep,period,signature){
    const merge=(r,from,to,v,style)=>{merges.push(`${col(from)}${r}:${col(to)}${r}`);return c(v,r,from,style)};
    row(2,42,merge(2,1,head?7:cols,`MONI  /  ${names[i].toUpperCase()}`,1));
    row(3,24,merge(3,1,head?7:cols,`${period} · ${rep.start||'Inicio'} a ${rep.end}`,0));
-   row(4,22,merge(4,1,head?7:cols,'Reporte ejecutivo · MONI versión 0.9.5',0));
+   row(4,22,merge(4,1,head?7:cols,'Reporte ejecutivo · MONI versión 1.0',0));
    const headerRow=6;
    if(head){
      const labels=[['INGRESOS',income/100],['GASTOS',expense/100],['BALANCE NETO',(income-expense)/100],['GASTOS HORMIGA',rep.ants/100]];
@@ -62,10 +62,29 @@ function makeExcel(all,rep,period,signature){
    }else{
      table.forEach((line,k)=>{const r=k+6;row(r,k===0?32:28,line.map((v,j)=>{const moneyCol=i===1?4:i===2?1:3;let style=k===0?1:(k%2===0?3:0);if(k>0&&typeof v==='number')style=i===2&&j===2?(k%2===0?7:6):j===moneyCol?(k%2===0?5:4):style;return c(v,r,j+1,style)}).join(''))});
    }
+   // Excel requires strictly ascending row numbers, exactly once each.
+   // The summary cards were previously writing rows 6,7,6,7,9,10,9,10.
+   const groupedRows=new Map();
+   for(const fragment of records){
+     const match=fragment.match(/^<row r="(\d+)" ht="(\d+)" customHeight="1">([\s\S]*)<\/row>$/);
+     if(!match)throw Error('Fila de Excel inválida');
+     const rowNum=Number(match[1]);
+     const previous=groupedRows.get(rowNum)||{height:0,cells:[]};
+     previous.height=Math.max(previous.height,Number(match[2]));
+     const cellPattern=/<c\s+[^>]*\br="([A-Z]+)\d+"[^>]*>(?:[\s\S]*?<\/c>)/g;
+     for(const cellMatch of match[3].matchAll(cellPattern))previous.cells.push({col:cellMatch[1],xml:cellMatch[0]});
+     groupedRows.set(rowNum,previous);
+   }
+   const orderedRows=[...groupedRows].sort((a,b)=>a[0]-b[0]).map(([number,record])=>{
+     record.cells.sort((a,b)=>a.col.localeCompare(b.col,'en',{numeric:true}));
+     const seen=new Set();
+     for(const c of record.cells){if(seen.has(c.col))throw Error('Celda repetida en fila '+number);seen.add(c.col)}
+     return `<row r="${number}" ht="${record.height}" customHeight="1">${record.cells.map(x=>x.xml).join('')}</row>`;
+   }).join('');
    const footerRow=head?52:table.length+11;
    const hasDraw=!!picture||(head&&!!chart);
    const widths=head?[3,19,17,17,3,18,17,17,3]:i===1?[3,17,42,27,17,22,3]:i===2?[3,37,22,22,3]:[3,17,42,28,24,3];
-   files[`xl/worksheets/sheet${i+1}.xml`]=xml(`<worksheet xmlns="${MX}" xmlns:r="${RX}"><sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews><cols>${widths.map((w,j)=>`<col min="${j+1}" max="${j+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${records.join('')}</sheetData>${!head?`<autoFilter ref="B6:${col(cols)}${Math.max(6,table.length+5)}"/>`:''}<mergeCells count="${merges.length}">${merges.map(ref=>`<mergeCell ref="${ref}"/>`).join('')}</mergeCells><pageMargins left="0.35" right="0.35" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${hasDraw?'<drawing r:id="rId1"/>':''}</worksheet>`);
+   files[`xl/worksheets/sheet${i+1}.xml`]=xml(`<worksheet xmlns="${MX}" xmlns:r="${RX}"><sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews><cols>${widths.map((w,j)=>`<col min="${j+1}" max="${j+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${orderedRows}</sheetData>${!head?`<autoFilter ref="B6:${col(cols)}${Math.max(6,table.length+5)}"/>`:''}<mergeCells count="${merges.length}">${merges.map(ref=>`<mergeCell ref="${ref}"/>`).join('')}</mergeCells><pageMargins left="0.35" right="0.35" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${hasDraw?'<drawing r:id="rId1"/>':''}</worksheet>`);
    if(hasDraw){
      files[`xl/worksheets/_rels/sheet${i+1}.xml.rels`]=exRels(exRel('rId1','drawing',`../drawings/drawing${i+1}.xml`));
      const pictures=[];const links=[];
@@ -81,4 +100,4 @@ function makeExcel(all,rep,period,signature){
  files['[Content_Types].xml']=xml(`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/>${['xl/workbook.xml','xl/styles.xml',...names.map((_,i)=>`xl/worksheets/sheet${i+1}.xml`)].map((file,i)=>`<Override PartName="/${file}" ContentType="application/vnd.openxmlformats-officedocument.${i===0?'spreadsheetml.sheet.main':i===1?'spreadsheetml.styles':'spreadsheetml.worksheet'}+xml"/>`).join('')}${contentTypes.join('')}</Types>`);
  return zipStore(files);
 }
-async function downloadExcel(){try{const response=await fetch('firma-anf.png?v=095');if(!response.ok)throw Error('Firma no disponible');const signature=new Uint8Array(await response.arrayBuffer()),p=document.getElementById('period'),rep=report(rows,p.value),blob=makeExcel(rows,rep,p.selectedOptions[0].textContent,signature),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='MONI-0.9.5-reporte-'+today()+'.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch(e){console.error(e);alert('No se pudo exportar el Excel. Revisa la firma y vuelve a intentar.')}}
+async function downloadExcel(){try{const response=await fetch('firma-anf.png?v=110');if(!response.ok)throw Error('Firma no disponible');const signature=new Uint8Array(await response.arrayBuffer()),p=document.getElementById('period'),rep=report(rows,p.value),blob=makeExcel(rows,rep,p.selectedOptions[0].textContent,signature),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='MONI-1.0-reporte-'+today()+'.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch(e){console.error(e);alert('No se pudo exportar el Excel. Revisa la firma y vuelve a intentar.')}}
