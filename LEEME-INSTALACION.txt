@@ -1,10 +1,15 @@
-MONI 1.0 — Corrección Excel y caché
+MONI 1.0 — Excel protegido para evitar modificaciones
 
-1. Dentro de MONI, guarda un respaldo antes de actualizar.
-2. Descomprime este ZIP y reemplaza todos los archivos en GitHub.
-3. Haz Commit changes.
-4. Abre MONI, actualiza con Ctrl + F5 y descarga un nuevo reporte.
-5. El reporte NUEVO se identifica como MONI-1.0-EXCEL-NUEVO-reporte-....xlsx. No abras archivos anteriores.
+Los reportes se pueden abrir y leer normalmente, pero las 4 hojas están protegidas contra edición.
+Contraseña para DESPROTEGER una hoja en Excel: MONI-ANF-2026
+En Excel: Revisar > Desproteger hoja > escribir contraseña.
+Esta es protección contra edición, NO cifrado de datos ni protección para impedir que se abra o copie.
 
-Se mantiene el nombre visible MONI 1.0, los datos, la voz, el diseño y la firma ANF.
-Actualización del generador, formato de imágenes y estrategia de caché.
+INSTRUCCIONES:
+1. Guarda un respaldo de datos de MONI.
+2. Descomprime este ZIP y reemplaza TODOS los archivos en GitHub.
+3. Confirma con Commit changes.
+4. Abre MONI y descarga otro Excel.
+5. El nuevo nombre del archivo comienza por MONI-1.0-PROTEGIDO-reporte-.
+
+Versión visible: MONI 1.0. Se conserva la imagen de firma y la aplicación completa.

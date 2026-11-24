@@ -1,5 +1,5 @@
-const CACHE='moni-120';
-const ASSETS=['./','index.html','styles.css?v=120','executive.css?v=120','database.js?v=120','reports.js?v=120','app.js?v=120','voice.js?v=120','queries.js?v=120','excel.js?v=120','executive.js?v=120','manifest.webmanifest','icon-192.png','icon-512.png','firma-anf.png?v=120'];
+const CACHE='moni-130';
+const ASSETS=['./','index.html','styles.css?v=130','executive.css?v=130','database.js?v=130','reports.js?v=130','app.js?v=130','voice.js?v=130','queries.js?v=130','excel.js?v=130','executive.js?v=130','manifest.webmanifest','icon-192.png','icon-512.png','firma-anf.png?v=130'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>{e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('moni-')&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]))});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;e.respondWith(fetch(e.request).then(response=>{if(response.ok){const clone=response.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,clone)))}return response}).catch(()=>caches.match(e.request).then(response=>response||caches.match('index.html'))))});
