@@ -1,13 +1,10 @@
-MONI 1.0 — Corrección de Excel
+MONI 1.0 — Corrección Excel y caché
 
-1. En MONI guarda un respaldo de tus movimientos.
-2. Descomprime el ZIP y sube los 16 archivos a la raíz del repositorio de GitHub, reemplazando los anteriores.
-3. En GitHub confirma Commit changes.
-4. Abre MONI y descarga otro reporte. Debe llamarse MONI-1.0-reporte-....xlsx.
+1. Dentro de MONI, guarda un respaldo antes de actualizar.
+2. Descomprime este ZIP y reemplaza todos los archivos en GitHub.
+3. Haz Commit changes.
+4. Abre MONI, actualiza con Ctrl + F5 y descarga un nuevo reporte.
+5. El reporte NUEVO se identifica como MONI-1.0-EXCEL-NUEVO-reporte-....xlsx. No abras archivos anteriores.
 
-CAMBIOS
-- Corregidas las filas duplicadas y desordenadas del XML de Excel (provocaban advertencias de recuperación).
-- Se conservan las 4 hojas, la imagen de gráfica y la firma original ANF en cada hoja.
-- El reporte ahora indica MONI 1.0.
-- Caché actualizado a 110.
-- No se modificaron movimientos, presupuestos, lógica de voz ni la tipografía del logotipo.
+Se mantiene el nombre visible MONI 1.0, los datos, la voz, el diseño y la firma ANF.
+Actualización del generador, formato de imágenes y estrategia de caché.
