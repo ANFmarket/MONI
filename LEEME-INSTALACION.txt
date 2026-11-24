@@ -1,23 +1,25 @@
-MONI 1.0 RC — ACTUALIZACIÓN INTEGRAL DE PRUEBA
+MONI · 1.0 RC2 — ENTREGA ACUMULATIVA PARA REVISIÓN FINAL
 
-1. Antes de actualizar, dentro de MONI selecciona Guardar respaldo y conserva el archivo JSON.
-2. Descarga y descomprime el ZIP.
-3. En GitHub, abre el repositorio MONI, usa Add file > Upload files.
-4. Sube TODOS los archivos de este paquete al NIVEL PRINCIPAL del repositorio; reemplaza los existentes.
-5. Guarda los cambios con Commit changes.
-6. Cierra la pestaña y abre nuevamente la app, preferiblemente en ventana privada para comprobar la versión.
+1. Antes de instalar: entra a MONI y selecciona Guardar respaldo. Guarda el JSON.
+2. Descomprime el ZIP y sube TODOS los archivos de esta carpeta al nivel principal del repositorio GitHub MONI. Reemplaza los archivos anteriores y haz Commit changes.
+3. Abre la aplicación y verifica que diga «MONI · Versión 1.0 RC2».
 
-La app debe mostrar «MONI · Versión 1.0 RC».
+CAMBIOS DE ESTA ENTREGA:
+- Slogan del menú: «Entiende tu dinero.»
+- Presupuesto excedido: porcentaje adicional y cantidad exacta en MXN.
+- Inicio: tarjeta «Próximos pagos» con vencimiento, pendientes y total mensual por pagar.
+- Gastos fijos: día de vencimiento de cada mes y estado Pendiente / Pagado.
+- Registrar pago solo una vez por mes; se genera un gasto real al confirmar. La plantilla no descuenta dinero por sí sola.
+- Conserva los movimientos, voz, consultas, reportes, estilos, Excel y firma ANF del paquete base.
+- Caché y versión visibles actualizados.
 
-REVISAR:
-- Inicio: tarjetas, gráficas, navegación
-- Movimientos: ingreso y gasto de prueba, edición y búsqueda
-- Presupuesto, metas, gastos fijos y quincenas
-- Reportes: exportar Excel y comprobar firma ANF en las cuatro hojas
-- Dictado, consultas por voz y respaldo/restauración
-- En móvil, navegación inferior
+PRUEBAS:
+- Ver «Entiende tu dinero.» debajo de MONI.
+- Presupuesto superado: mostrar MXN y porcentaje excedidos.
+- Crear gasto fijo y ver «Pendiente» en Inicio.
+- Pulsar Registrar pago en Gastos fijos y ver «Pagado» en Inicio y el movimiento nuevo.
+- No permitir dos registros del mismo gasto fijo dentro del mismo mes.
+- Verificar micrófono, Excel (cuatro hojas y firma ANF) y respaldos.
 
-No se borra ni cambia la clave de almacenamiento de movimientos existente (moni-v01).
-El presupuesto, metas y gastos fijos se guardan localmente en el mismo navegador.
-No hay sincronización automática entre dispositivos; conserva respaldos.
-Esta es versión candidata (RC) y requiere validación real antes de declararla 1.0 estable.
+Importante: pagos, movimientos y metas se guardan en ESTE navegador. No hay sincronización automática entre dispositivos.
+La versión RC2 es candidata y necesita una revisión final real antes de declarar MONI 1.0 estable.
