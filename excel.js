@@ -58,7 +58,7 @@ function makeExcel(all,rep,period,signature){
         row(r,23,merged(r,1,3,labels[left],1)+(right<5?merged(r,5,7,labels[right],1):''));
         row(r+1,39,merged(r+1,1,3,vals[left],left===2?9:8)+(right<5?merged(r+1,5,7,vals[right],right===2?9:8):''));
       }
-      if(chart) row(15,28,merged(15,1,span,'Gastos por categoría (MXN)',2));
+      if(chart) row(15,28,merged(15,1,span,'ANÁLISIS DE GASTOS · DISTRIBUCIÓN Y COMPARATIVA',2));
       else row(15,28,merged(15,1,span,'Sin gastos en este periodo',10));
       footerRow=chart?chartEnd+3:17;
     } else {
@@ -97,11 +97,11 @@ function makeExcel(all,rep,period,signature){
     const extent='cx="1476375" cy="417604"';
     const picAnchor=(rowNum,embedId,picId=3)=>`<xdr:oneCellAnchor><xdr:from><xdr:col>2</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${rowNum}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext ${extent}/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${picId}" name="Firma ANF"/><xdr:cNvPicPr/></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="${embedId}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext ${extent}/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`;
 
-    const chartAnchor = chart ? `<xdr:twoCellAnchor><xdr:from><xdr:col>1</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>15</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>8</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${chartEnd}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:graphicFrame><xdr:nvGraphicFramePr><xdr:cNvPr id="2" name="Gastos por categoría"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm><a:graphic><a:graphicData uri="${C}"><c:chart xmlns:c="${C}" r:id="rId1"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor>` : '';
+    const chartAnchor = chart ? `<xdr:twoCellAnchor><xdr:from><xdr:col>1</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>15</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>5</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${chartEnd}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:graphicFrame><xdr:nvGraphicFramePr><xdr:cNvPr id="2" name="Gastos por categoría"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm><a:graphic><a:graphicData uri="${C}"><c:chart xmlns:c="${C}" r:id="rId1"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor><xdr:twoCellAnchor><xdr:from><xdr:col>5</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>15</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>8</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${chartEnd}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:graphicFrame><xdr:nvGraphicFramePr><xdr:cNvPr id="4" name="Ingresos contra gastos"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm><a:graphic><a:graphicData uri="${C}"><c:chart xmlns:c="${C}" r:id="rId3"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor>` : '';
 
     // Sheet 1: chart + signature, or only signature.
     f['xl/drawings/drawing1.xml']=xml(`<xdr:wsDr xmlns:xdr="${D}" xmlns:a="${A}" xmlns:r="${RX}">${chartAnchor}${picAnchor(signatureRows[1], chart?'rId2':'rId1', 3)}</xdr:wsDr>`);
-    f['xl/drawings/_rels/drawing1.xml.rels']=rels((chart?rel('rId1','chart','../charts/chart1.xml'):'')+rel(chart?'rId2':'rId1','image','../media/firma-anf.png'));
+    f['xl/drawings/_rels/drawing1.xml.rels']=rels((chart?rel('rId1','chart','../charts/chart1.xml')+rel('rId3','chart','../charts/chart2.xml'):'')+rel(chart?'rId2':'rId1','image','../media/firma-anf.png'));
 
     // Sheets 2-4: only signature image.
     for(let sheet=2; sheet<=4; sheet++){
@@ -112,8 +112,14 @@ function makeExcel(all,rep,period,signature){
     f['xl/media/firma-anf.png']=signature;
 
     if(chart){
-      let end=rep.groups.length+6;
-      f['xl/charts/chart1.xml']=xml(`<c:chartSpace xmlns:c="${C}" xmlns:a="${A}"><c:chart><c:plotArea><c:layout/><c:barChart><c:barDir val="bar"/><c:grouping val="clustered"/><c:ser><c:idx val="0"/><c:order val="0"/><c:spPr><a:solidFill><a:srgbClr val="139F91"/></a:solidFill></c:spPr><c:cat><c:strRef><c:f>'Categorías'!$B$7:$B$${end}</c:f></c:strRef></c:cat><c:val><c:numRef><c:f>'Categorías'!$C$7:$C$${end}</c:f></c:numRef></c:val></c:ser><c:dLbls><c:numFmt formatCode="&quot;$&quot;#,##0" sourceLinked="0"/><c:dLblPos val="outEnd"/><c:showVal val="1"/></c:dLbls><c:gapWidth val="65"/><c:axId val="10"/><c:axId val="20"/></c:barChart><c:catAx><c:axId val="10"/><c:scaling><c:orientation val="maxMin"/></c:scaling><c:axPos val="l"/><c:crossAx val="20"/><c:crosses val="autoZero"/></c:catAx><c:valAx><c:axId val="20"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:axPos val="b"/><c:majorGridlines><c:spPr><a:ln w="6350"><a:solidFill><a:srgbClr val="DCE9E6"/></a:solidFill></a:ln></c:spPr></c:majorGridlines><c:crossAx val="10"/><c:crosses val="autoZero"/></c:valAx></c:plotArea><c:plotVisOnly val="1"/></c:chart></c:chartSpace>`);
+      const end=rep.groups.length+6;
+      const pctColors=['087C68','139F91','40D8C5','61B7A7','92D7CA','397F9A','A6C9D8','C7EDE5','70AFA1','AEC5C0'];
+      const categoryPts=rep.groups.map(([name],i)=>`<c:pt idx="${i}"><c:v>${esc(name)}</c:v></c:pt>`).join('');
+      const amountPts=rep.groups.map(([,amount],i)=>`<c:pt idx="${i}"><c:v>${amount/100}</c:v></c:pt>`).join('');
+      const pieces=rep.groups.map((_,i)=>`<c:dPt><c:idx val="${i}"/><c:spPr><a:solidFill><a:srgbClr val="${pctColors[i%pctColors.length]}"/></a:solidFill></c:spPr></c:dPt>`).join('');
+      f['xl/charts/chart1.xml']=xml(`<c:chartSpace xmlns:c="${C}" xmlns:a="${A}"><c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="es-MX" sz="1300" b="1"/><a:t>Gastos por categoría</a:t></a:r></a:p></c:rich></c:tx></c:title><c:plotArea><c:layout/><c:doughnutChart><c:holeSize val="57"/><c:firstSliceAng val="270"/><c:varyColors val="1"/><c:ser><c:idx val="0"/><c:order val="0"/>${pieces}<c:cat><c:strRef><c:f>'Categorías'!$B$7:$B$${end}</c:f><c:strCache><c:ptCount val="${rep.groups.length}"/>${categoryPts}</c:strCache></c:strRef></c:cat><c:val><c:numRef><c:f>'Categorías'!$C$7:$C$${end}</c:f><c:numCache><c:formatCode>General</c:formatCode><c:ptCount val="${rep.groups.length}"/>${amountPts}</c:numCache></c:numRef></c:val><c:dLbls><c:showLegendKey val="0"/><c:showVal val="0"/><c:showPercent val="1"/></c:dLbls></c:ser></c:doughnutChart></c:plotArea><c:legend><c:legendPos val="b"/><c:layout/></c:legend><c:plotVisOnly val="1"/></c:chart></c:chartSpace>`);
+      const income=sum(rowsInPeriod.filter(r=>r.type==='income'))/100,expense=rep.total/100;
+      f['xl/charts/chart2.xml']=xml(`<c:chartSpace xmlns:c="${C}" xmlns:a="${A}"><c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="es-MX" sz="1300" b="1"/><a:t>Ingresos vs. gastos</a:t></a:r></a:p></c:rich></c:tx></c:title><c:plotArea><c:layout/><c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="1"/><c:ser><c:idx val="0"/><c:order val="0"/><c:dPt><c:idx val="0"/><c:spPr><a:solidFill><a:srgbClr val="139F91"/></a:solidFill></c:spPr></c:dPt><c:dPt><c:idx val="1"/><c:spPr><a:solidFill><a:srgbClr val="397F9A"/></a:solidFill></c:spPr></c:dPt><c:cat><c:strLit><c:ptCount val="2"/><c:pt idx="0"><c:v>Ingresos</c:v></c:pt><c:pt idx="1"><c:v>Gastos</c:v></c:pt></c:strLit></c:cat><c:val><c:numLit><c:formatCode>General</c:formatCode><c:ptCount val="2"/><c:pt idx="0"><c:v>${income}</c:v></c:pt><c:pt idx="1"><c:v>${expense}</c:v></c:pt></c:numLit></c:val></c:ser><c:gapWidth val="90"/><c:axId val="10"/><c:axId val="20"/></c:barChart><c:catAx><c:axId val="10"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:axPos val="b"/><c:crossAx val="20"/></c:catAx><c:valAx><c:axId val="20"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:axPos val="l"/><c:crossAx val="10"/><c:crosses val="autoZero"/></c:valAx></c:plotArea><c:plotVisOnly val="1"/></c:chart></c:chartSpace>`);
     }
   }
 
@@ -126,7 +132,7 @@ function makeExcel(all,rep,period,signature){
   const drawingOverrides = signature
     ? [1,2,3,4].map(n=>`<Override PartName="/xl/drawings/drawing${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>`).join('')
     : '';
-  const chartOverride = chart ? '<Override PartName="/xl/charts/chart1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>' : '';
+  const chartOverride = chart ? '<Override PartName="/xl/charts/chart1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/><Override PartName="/xl/charts/chart2.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>' : '';
   const pngDefault = signature ? '<Default Extension="png" ContentType="image/png"/>' : '';
 
   f['[Content_Types].xml']=xml(`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${pngDefault}${Object.entries(overrides).map(([p,t])=>`<Override PartName="/${p}" ContentType="application/vnd.openxmlformats-officedocument.${t}+xml"/>`).join('')}${drawingOverrides}${chartOverride}</Types>`);
@@ -146,7 +152,7 @@ async function downloadExcel(){
   let p=document.getElementById('period'),rep=report(rows,p.value),url=URL.createObjectURL(makeExcel(rows,rep,p.selectedOptions[0].textContent,signature));
   let a=document.createElement('a');
   a.href=url;
-  a.download='MONI-reporte-'+today()+'.xlsx';
+  a.download='MONI-reporte-0.9.4-'+today()+'.xlsx';
   a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000)
 }

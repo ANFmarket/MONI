@@ -20,14 +20,14 @@
 <section><h2>Reportes</h2><label>Periodo<select id="period"><option value="today">Hoy</option><option value="yesterday">Ayer</option><option value="week">Esta semana</option><option selected value="month">Este mes</option><option value="year">Este año</option><option value="all">Todo el historial</option><option value="custom">Personalizado</option></select></label><div id="dates" hidden><label>Desde<input type="date" id="from"></label><label>Hasta<input type="date" id="to"></label></div><p id="reportTotal"></p><div id="chart"></div><small id="reportCount"></small><p><small>Hormiga: marcados manualmente o gastos de hasta $100 repetidos en una categoría durante el mismo mes.</small></p><button id="excel" type="button">Exportar a Excel</button><p class="ant">☕ Gastos hormiga (estimados) <strong id="ants"></strong></p></section>
 <section><h2>Movimientos</h2><label>Buscar movimientos<input id="searchMoves" type="search" placeholder="Concepto, categoría, fecha o importe"></label><div id="history"></div></section>
 <section><details><summary>Configuración y respaldo</summary><label>Nueva categoría<input id="newCategory" maxlength="60" placeholder="Ej. Mascotas"></label><button id="addCategory" type="button">Agregar categoría</button><small id="categoryStatus" aria-live="polite"></small><button id="export">Guardar respaldo</button><label>Restaurar respaldo<input type="file" id="restore" accept=".json,application/json"></label><small>Los datos se guardan en este navegador. Exporta un respaldo antes de borrar datos o cambiar de equipo.</small></details></section>
-<footer style="display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.15"><img src="firma-anf.png" alt="ANF — Desarrollador de soluciones" style="width:155px;max-width:90%;height:auto;display:block"><small>MONI · Versión 0.9.3</small></footer>
+<footer style="display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.15"><img src="firma-anf.png" alt="ANF — Desarrollador de soluciones" style="width:155px;max-width:90%;height:auto;display:block"><small>MONI · Versión 0.9.4</small></footer>
 </main>
 <script src="database.js?v=080"></script>
 <script src="reports.js?v=080"></script>
 <script src="app.js?v=090"></script>
 <script src="queries.js?v=080"></script>
 <script src="voice.js?v=080"></script>
-<script src="excel.js?v=093"></script>
+<script src="excel.js?v=094"></script>
 <script>document.getElementById('excel').onclick=downloadExcel;</script>
 </body>
 </html>
