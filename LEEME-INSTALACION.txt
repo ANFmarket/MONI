@@ -1,0 +1,23 @@
+MONI 1.0 RC — ACTUALIZACIÓN INTEGRAL DE PRUEBA
+
+1. Antes de actualizar, dentro de MONI selecciona Guardar respaldo y conserva el archivo JSON.
+2. Descarga y descomprime el ZIP.
+3. En GitHub, abre el repositorio MONI, usa Add file > Upload files.
+4. Sube TODOS los archivos de este paquete al NIVEL PRINCIPAL del repositorio; reemplaza los existentes.
+5. Guarda los cambios con Commit changes.
+6. Cierra la pestaña y abre nuevamente la app, preferiblemente en ventana privada para comprobar la versión.
+
+La app debe mostrar «MONI · Versión 1.0 RC».
+
+REVISAR:
+- Inicio: tarjetas, gráficas, navegación
+- Movimientos: ingreso y gasto de prueba, edición y búsqueda
+- Presupuesto, metas, gastos fijos y quincenas
+- Reportes: exportar Excel y comprobar firma ANF en las cuatro hojas
+- Dictado, consultas por voz y respaldo/restauración
+- En móvil, navegación inferior
+
+No se borra ni cambia la clave de almacenamiento de movimientos existente (moni-v01).
+El presupuesto, metas y gastos fijos se guardan localmente en el mismo navegador.
+No hay sincronización automática entre dispositivos; conserva respaldos.
+Esta es versión candidata (RC) y requiere validación real antes de declararla 1.0 estable.
